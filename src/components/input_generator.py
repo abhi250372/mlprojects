@@ -43,6 +43,12 @@ price_impact = -1.8 * df["current_price"]
 traffic_impact = 0.8 * df["page_views_30d"]
 promo_shock = np.where(df["week"] == 6, 150, 0) # Systematic structural spike
 
+# 4. Add a date column for better interpretability
+df["date"] = pd.to_datetime('2023-01-01') + pd.to_timedelta((df['week'] - 1)) * 7
+df['year'] = df['date'].dt.year 
+df['month'] = df['date'].dt.month
+df['quarter'] = df['date'].dt.quarter
+
 # Base signal calculation
 signal = base_demand + price_impact + traffic_impact + promo_shock
 noise = np.random.normal(0, 30, total_rows)
